@@ -1,1 +1,1 @@
-# VOIDinstaller
+# VOID LXQT Post installer
