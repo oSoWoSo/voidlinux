@@ -63,7 +63,7 @@ make=(
 
 for util in ${make[@]}
 do
-    git clone https://github.com/AxelBohm/$util.git /home/zen/src/$util
-    cd /home/zen/src/$util
-    sudo make clean install
+    git clone git://github.com/bahamas10/vpm.git
+    mkdir -p ~/bin
+    ln -s "$PWD/vpm" ~/bin/vpm
 done
