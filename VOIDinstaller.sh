@@ -63,7 +63,7 @@ make=(
 
 for util in ${make[@]}
 do
-    git clone https://github.com/AxelBohm/$util.git /home/xel/src/$util
-    cd /home/xel/src/$util
+    git clone https://github.com/AxelBohm/$util.git /home/zen/src/$util
+    cd /home/zen/src/$util
     sudo make clean install
 done
