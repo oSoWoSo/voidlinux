@@ -16,7 +16,11 @@ xbps-install -Syu
 
 echo "						Installing drivers..."
 sleep 1s
-xbps-install nvidia ntfs-3g
+xbps-install nvidia
+xbps-install xorg-minimal
+xbps-install slim
+xbps-install ntfs-3g
+
 echo "						Installing vpm and vsv for manage packages and services"
 sleep 1s
 xbps-install vsv git
@@ -29,7 +33,6 @@ xbps-install nano geany
 
 echo "						Installing browser"
 sleep 1s
-#xbps-remove falkon
 xbps-install firefox
 echo "						Installing essentials"
 sleep 1s
