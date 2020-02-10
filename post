@@ -3,6 +3,7 @@
 # Void Linux post-install script
 
 echo "						Starting Void Linux post-install script..."
+echo "						You can skip script pressing ctrl + c"
 sleep 1s
 
 #install basic
@@ -16,17 +17,17 @@ xbps-install -Syu
 echo "						Installing drivers..."
 sleep 1s
 xbps-install nvidia ntfs-3g
-echo "						installing vpm and vsv for manage packages and services"
+echo "						Installing vpm and vsv for manage packages and services"
 sleep 1s
 xbps-install vsv git
 git clone git://github.com/zen0bit/vpm.git
 cp vpm/vpm /usr/bin
 
-echo "						installing editors"
+echo "						Installing editors"
 sleep 1s
 xbps-install nano geany
 
-echo "						installing browser"
+echo "						Installing browser"
 sleep 1s
 #xbps-remove falkon
 xbps-install firefox
