@@ -1,0 +1,330 @@
+#!/bin/bash
+
+UPDATE_AFTER=43200 # 12 hours
+
+usage() {
+cat <<HELP
+Cross-platform package manager wrapper
+
+usage: $(basename "$0") OPTION [PACKAGE]
+
+   SINGLE PACKAGE ACTIONS
+   (i)nstall : install a given package
+   (r)emove  : remove a given package
+   (p)urge   : remove a given package and any related config files
+   (s)earch  : search for a package
+   (m)anual  : install a locally downloaded package (e.g.: a .deb file)
+
+   UPDATING
+   (u)pdate  : update all installed packages
+   (c)ache   : update the package cache / repository
+
+               NOTE: update, install, and num-updates will automatically
+               update the cache if it is old
+
+   MISC
+   (l)ist            : list installed packages
+   (nu) num-updates  : number of packages with updates
+   (np) num-packages : number of installed packages
+
+
+https://github.com/keithieopia/piu
+
+Copyright (c) 2017-2018 Timothy Keith
+Licensed under the MIT license.
+HELP
+}
+
+
+# Distro Specific
+########################################################################
+
+#
+# Alpine Linux
+#
+
+apk_install() { sudo apk add "$@"; }
+apk_update()  { sudo apk upgrade; }
+apk_remove()  { sudo apk del "$@"; }
+apk_purge()   { sudo apk del "$@" && sudo apk cache clean; }
+apk_search()  { apk search -v "$@"; }
+apk_list()    { apk info; }
+apk_manual()  { sudo apk add --allow-untrusted "$@"; }
+
+apk_repo_age() {
+	find /var/cache/apk -type f -print0 | xargs -0 stat -c %Z | sort | tail -1
+}
+
+apk_repo_update() {
+	if ! sudo -n apk update &> /dev/null; then
+		echo "out-of-date"
+		exit 1
+	fi
+}
+
+apk_num_updates() {
+	echo "not implemented yet!" && exit 1;
+}
+
+apk_num_pkgs() {
+	apk list | wc -l
+}
+
+#
+# Arch Linux
+#
+
+pacman_install() { sudo pacman -S "$@"; }
+pacman_update()  { sudo pacman -Su; }
+pacman_remove()  { sudo pacman -Rs "$@"; }
+pacman_purge()   { sudo pacman -Rns "$@"; }
+pacman_search()  { pacman -Ss "$@"; }
+pacman_list()    { pacman -Qqe; }
+pacman_manual()  { sudo pacman -U "$@"; }
+
+pacman_repo_age() {
+	LOG_DATE=$(grep 'synchronizing package lists' /var/log/pacman.log | \
+               tail -1 | awk '{print $1" "$2}' | tr -d \[\])
+	date -d "$LOG_DATE" +%s
+}
+
+pacman_repo_update() {
+	if ! sudo -n pacman -Sy &> /dev/null; then
+		echo "out-of-date"
+		exit 1
+	fi
+}
+
+pacman_num_updates() {
+	pacman -Qu | wc -l
+}
+
+pacman_num_pkgs() {
+	pacman_list | wc -l
+}
+
+#
+# Void Linux
+#
+
+xbps_install() { sudo xbps-install -S "$@"; }
+xbps_update()  { sudo xbps-install -Su; }
+xbps_remove()  { sudo xbps-remove -R "$@"; }
+xbps_purge()   { sudo xbps-remove -R "$@" && sudo xbps-remove -Oo; }
+xbps_search()  { xbps-query -Rs "$@"; }
+xbps_list()    { xbps-query -l; }
+xbps_manual()  { echo "not implemented yet!" && exit 1; }
+
+xbps_repo_age() {
+	stat -c '%Y' '/var/db/xbps/https___repo_voidlinux_eu_current'
+}
+
+xbps_repo_update() {
+	if ! sudo -n xbps-install -S &> /dev/null; then
+		echo "out-of-date"
+		exit 1
+	fi
+}
+
+xbps_num_updates() {
+	xbps-install -nu | wc -l
+}
+
+xbps_num_pkgs() {
+	echo "not implemented yet!" && exit 1
+}
+
+#
+# Debian / Ubuntu
+#
+
+apt_install() { sudo apt install "$@"; }
+apt_update()  { sudo apt upgrade; }
+apt_remove()  { sudo apt remove "$@"; }
+apt_purge()   { sudo apt purge "$@"; }
+apt_search()  { apt search "$@"; }
+apt_list()    { dpkg-query -f '${binary:Package}\n' -W; }
+apt_manual()  { sudo dpkg -i "$@"; }
+
+apt_repo_age() {
+	stat -c '%Y' '/var/cache/apt/pkgcache.bin'
+}
+
+apt_repo_update() {
+	if ! sudo -n apt update &> /dev/null; then
+		echo 'out-of-date'
+		exit 1
+	fi
+}
+
+apt_num_updates() {
+	apt list --upgradeable 2>/dev/null | tail -n +2 | wc -l
+}
+
+apt_num_pkgs() {
+	apt_list | wc -l
+}
+
+#
+# Red Hat / Fedora
+#
+
+dnf_install() { sudo dnf install -C "$@"; }
+dnf_update()  { sudo dnf upgrade; }
+dnf_remove()  { sudo dnf remove -C "$@"; }
+dnf_purge()   {
+    # yum / dnf remove works just like apt's purge
+    # https://unix.stackexchange.com/questions/8191/what-is-fedoras-equivalent-of-apt-get-purge/8193
+    sudo dnf remove "$@"
+}
+dnf_search()  { dnf search -C "$@"; }
+dnf_list()    { dnf list installed -C | awk '{if(NR>1)print $1}'; }
+dnf_manual()  { sudo dnf localinstall "$@"; }
+
+dnf_repo_age() {
+	stat -c '%Y' '/var/cache/dnf/packages.db'
+}
+
+dnf_repo_update() {
+	if ! dnf clean metadata && dnf check-update &> /dev/null; then
+		echo 'out-of-date'
+		exit 1
+	fi
+}
+
+dnf_num_updates() {
+	dnf check-update | awk '{if(NR>2)print $1}' | wc -l
+}
+
+dnf_num_pkgs() {
+	dnf_list | wc -l
+}
+
+#
+# macOS
+#
+
+brew_install() { brew install "$@"; }
+brew_update()  { brew upgrade; }
+brew_remove()  { brew uninstall "$@"; }
+brew_search()  { brew search "$@"; }
+brew_list()    { brew list; }
+
+brew_repo_age() {
+	date +%s
+}
+
+brew_repo_update() {
+	brew update
+}
+
+brew_num_updates() {
+	echo "not implemented yet!" && exit 1;
+}
+
+brew_num_pkgs() {
+	brew_list | wc -l
+}
+
+is_darwin() {
+	uname -a | grep Darwin > /dev/null;
+}
+
+# Abstraction
+########################################################################
+
+repo_update_if_needed() {
+	CURRENT_TIME=$(date '+%s')
+	LAST_UPDATE=$(eval "${PKGMAN}"_repo_age)
+
+	if ((CURRENT_TIME-LAST_UPDATE > UPDATE_AFTER)); then
+		eval "${PKGMAN}"_repo_update
+	fi
+}
+
+# Find the current distribution
+if [ -f /etc/os-release ]; then
+	if grep -q arch /etc/os-release; then
+		PKGMAN='pacman'
+	elif grep -q debian /etc/os-release; then
+		PKGMAN='apt'
+	elif grep -q void /etc/os-release; then
+		PKGMAN='xbps'
+	elif grep -q alpine /etc/os-release; then
+		PKGMAN='apk'
+	elif grep -q fedora /etc/os-release; then
+		PKGMAN='dnf'
+	else
+		echo "ERROR: I currently don't have support for your distro"
+		exit 1
+	fi
+else
+	if is_darwin; then
+		PKGMAN='brew'
+	else
+		echo "Error: cannot detect platform"
+		exit 1
+	fi
+fi
+
+# find what we're doing
+########################################################################
+
+# make leading dashes optional, out of tradition
+if is_darwin; then
+  action=$(echo "$1" | sed 's/^-*//g')
+else
+  action=$(echo "$1" | sed 's/^-*//g' --)
+fi
+
+case "$action" in
+	s | search)
+		shift 1
+		eval ${PKGMAN}_search "$@"
+		;;
+
+	r | remove)
+		shift 1
+		eval ${PKGMAN}_remove "$@"
+		;;
+
+	p | purge)
+		shift 1
+		eval ${PKGMAN}_purge "$@"
+		;;
+
+	l | list)
+		eval ${PKGMAN}_list
+		;;
+
+	i | install)
+		shift 1
+		repo_update_if_needed
+		eval ${PKGMAN}_install "$@"
+		;;
+
+	u | update)
+		repo_update_if_needed
+		eval ${PKGMAN}_update
+		;;
+
+	nu | num-updates)
+		eval ${PKGMAN}_num_updates
+		;;
+
+	np | num-packages)
+		eval ${PKGMAN}_num_pkgs
+		;;
+
+	c | cache)
+		eval ${PKGMAN}_repo_update
+		;;
+
+	m | manual)
+		eval ${PKGMAN}_manual
+		;;
+
+	*)
+		usage
+		;;
+esac
