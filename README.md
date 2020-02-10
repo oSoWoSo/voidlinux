@@ -1,1 +1,1 @@
-# VOID LXQT Post installer
+VOID base post install script
