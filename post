@@ -1,4 +1,3 @@
-
 #!/bin/bash
 # Void Linux post-install script
 
@@ -6,40 +5,60 @@ echo "						Starting Void Linux post-install script..."
 echo "						You can skip script pressing ctrl + c"
 sleep 1s
 
-#install basic
-xbps-install -S
-xbps-install libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
+sudo xbps-install -S
+sudo xbps-install libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
 
 echo "						Updating system..."
 sleep 1s
-xbps-install -Syu
+sudo xbps-install -Syu
 
 echo "						Installing drivers..."
 sleep 1s
-xbps-install nvidia
-xbps-install xorg-minimal
-xbps-install slim
-xbps-install ntfs-3g
+sudo xbps-install nvidia
+sudo xbps-install xorg-minimal
+sudo xbps-install slim slim-void-theme
+sudo xbps-install ntfs-3g mtools
 
 echo "						Installing vpm and vsv for manage packages and services"
 sleep 1s
-xbps-install vsv git
+sudo xbps-install vsv git
 git clone git://github.com/zen0bit/vpm.git
-cp vpm/vpm /usr/bin
+sudo xbps-install vpsm
+
+echo "						Installing openbox"
+sleep 1s
+sudo xbps-install openbox
 
 echo "						Installing editors"
 sleep 1s
-xbps-install nano geany
+sudo xbps-install nano geany
 
 echo "						Installing browser"
 sleep 1s
-xbps-install firefox
+sudo xbps-install firefox
+
 echo "						Installing essentials"
 sleep 1s
-xbps-install xarchiver neofetch
+sudo xbps-install fish-shell gparted xarchiver neofetch
+
+echo "						Installing virtualisation"
+sleep 1s
+
+sudo xbps-install virt-manager libvirt qemu
+echo "						Installing needed services...."
+sleep 1s
+sudo ln -s /etc/sv/libvirtd /var/service
+sudo ln -s /etc/sv/virtlockd /var/service
+sudo ln -s /etc/sv/virtlogd /var/service
+
+echo "						Configuring system...."
+sleep 1s
+sudo gpasswd -a "$USER" libvirt
+
 echo "						Removing orphaned packages...."
 sleep 1s
-xbps-remove -Oo
+sudo xbps-remove -Oo
 clear
 neofetch
+
 echo "						Restart your computer and enjoy Void linux...."
