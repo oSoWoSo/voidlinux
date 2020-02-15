@@ -15,31 +15,31 @@ sudo xbps-install -Syu
 echo "$(tput setaf 1)						Installing drivers$(tput sgr 0)"
 sleep 1s
 sudo xbps-install -y nvidia
-sudo xbps-install -y xorg-minimal xorg-fonts
-sudo xbps-install -y lightdm lightdm-gtk3-greeter
+#sudo xbps-install -y xorg-minimal xorg-fonts
+#sudo xbps-install -y lightdm lightdm-gtk3-greeter
 sudo xbps-install -y ntfs-3g mtools
-sudo xbps-install -y alsa-utils sox AlsaMixer.app
+sudo xbps-install -y alsa-utils sox volumeicon
 sudo nvidia-xconfig
 
 echo "$(tput setaf 1)						Installing packages$(tput sgr 0)"
 sleep 1s
 sudo xbps-install -y vsv git
-git clone git://github.com/zen0bit/vpm.git
-sudo cp -v vpm/vpm /bin
+#git clone git://github.com/zen0bit/vpm.git
+sudo cp -v ~/bin/vpm /bin
 sudo xbps-install -y vpsm
-git clone git://github.com/void-linux/void-packages.git
+#git clone git://github.com/void-linux/void-packages.git
 
 echo "$(tput setaf 1)						Installing openbox$(tput sgr 0)"
 sleep 1s
-sudo xbps-install -y pcmanfm-qt lxqt-sudo lxqt-admin lxqt-config qterminal
-sudo xbps-install -y openbox obconf-qt oblogout obmenu obmenu-generator tint2 psuinfo nitrogen
-sudo xbps-install -y breeze-gtk breeze-cursors breeze-icons adwaita-qt adwaita-icon-theme adwaita-plus
-
+#sudo xbps-install -y pcmanfm-qt lxqt-sudo lxqt-admin lxqt-config qterminal
+#sudo xbps-install -y openbox obconf-qt oblogout obmenu obmenu-generator tint2 psuinfo nitrogen
+#sudo xbps-install -y breeze-gtk breeze-cursors breeze-icons adwaita-qt adwaita-icon-theme adwaita-plus
+sudo xbps-install -y lumina trident-icons
 #git clone git://gitlab.com/dwt1/dt-dark-theme.git
 
 echo "$(tput setaf 1)						Installing editors$(tput sgr 0)"
 sleep 1s
-sudo xbps-install -y xterm nano geany
+#sudo xbps-install -y xterm nano geany
 
 echo "$(tput setaf 1)						Installing browser$(tput sgr 0)"
 sleep 1s
@@ -47,27 +47,31 @@ sudo xbps-install firefox
 
 echo "$(tput setaf 1)						Installing essentials$(tput sgr 0)"
 sleep 1s
-sudo xbps-install -y htop fish-shell gparted xarchiver neofetch conky libgee08 rsync ImageMagick
-git clone https://github.com/zcot/conky-manager2.git
-sudo xbps-install -y vlc
+sudo xbps-install -y htop fish-shell gparted conky libgee08 rsync ImageMagick
+#sudo xbps-install -y htop fish-shell gparted xarchiver neofetch conky libgee08 rsync ImageMagick
+#git clone https://github.com/zcot/conky-manager2.git
+#sudo xbps-install -y vlc
 
 echo "$(tput setaf 1)						Installing virtualisation$(tput sgr 0)"
 sleep 1s
-
 sudo xbps-install -y virt-manager libvirt qemu
+
 echo "$(tput setaf 1)						Installing services$(tput sgr 0)"
 sleep 1s
 sudo ln -s /etc/sv/libvirtd /var/service
 sudo ln -s /etc/sv/virtlockd /var/service
 sudo ln -s /etc/sv/virtlogd /var/service
 sudo ln -s /etc/sv/dbus /var/service
+sudo ln -s /etc/sv/acpid /var/service
+
 echo "$(tput setaf 1)						Configuring system$(tput sgr 0)"
 sleep 1s
 sudo usermod --shell /bin/fish zen
 sudo gpasswd -a "$USER" libvirt
-obmenu-generator -s -i -r -d -c
+#obmenu-generator -s -i -r -d -c
 
 echo "$(tput setaf 1)						Installing gaming$(tput sgr 0)"
+sleep 1s
 sudo xbps-install -y steam nvidia-libs-32bit libdrm-32bit
 
 echo "$(tput setaf 1)						Removing orphaned packages$(tput sgr 0)"
@@ -77,4 +81,4 @@ neofetch
 
 echo "$(tput setaf 1)						Restart your computer and enjoy Void linux....$(tput sgr 0)"
 sleep 5s
-sudo ln -s /etc/sv/lightdm /var/service
+#sudo ln -s /etc/sv/lightdm /var/service
