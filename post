@@ -41,7 +41,7 @@ sudo xbps-install -y nano geany
 
 echo "$(tput setaf 1)						Installing browser$(tput sgr 0)"
 sleep 1s
-sudo xbps-install firefox
+sudo xbps-install -y firefox
 
 echo "$(tput setaf 1)						Installing essentials$(tput sgr 0)"
 sleep 1s
