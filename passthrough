@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "Edit grub: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
+sleep 3
+sudo nano /etc/default/grub
+
+echo "Updating grub"
+sleep 3
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+echo "Getting GPU passthrough scripts ready"
+sleep 3
+sudo cp vfio-pci-override-vga.sh /usr/bin/vfio-pci-override-vga.sh
+sudo chmod 755 /usr/bin/vfio-pci-override-vga.sh
+
+echo "install vfio-pci /usr/bin/vfio-pci-override-vga.sh" > /etc/modprobe.d/local.conf
+sleep 3
+sudo cp local.conf /etc/dracut.conf.d/local.conf
+
+echo "Generating initramfs"
+sleep 3
+sudo dracut -f --kver $(uname -r)
