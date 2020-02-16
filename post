@@ -55,7 +55,7 @@ sudo nvidia-xconfig
 
 echo "$(tput setaf 1)						Installing packages$(tput sgr 0)"
 sleep 1s
-sudo xbps-install -y vsv git
+sudo xbps-install -y vsv git wget
 sudo chmod +x mirrors piu vpm vpsm vsv
 sudo cp -v ~/bin/vpm /bin
 sudo xbps-install -y vpsm
