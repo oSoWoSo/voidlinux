@@ -116,4 +116,5 @@ neofetch
 echo "$(tput setaf 1)						Restart your computer and enjoy Void linux....$(tput sgr 0)"
 sleep 5s
 ./passthrough
+sleep 5s
 sudo ln -s /etc/sv/lightdm /var/service
