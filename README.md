@@ -12,7 +12,7 @@ sudo xbps-install git
 
 git clone git://github.com/zen0bit/bin.git
 
-chmod +x /bin/post
+sudo chmod +x ~/bin/post
 
 ./bin/post
 
