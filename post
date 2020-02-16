@@ -67,7 +67,7 @@ sleep 1s
 sudo usermod --shell /bin/fish zen
 sudo gpasswd -a "$USER" libvirt
 touch ~/.config/openbox/menu.xml
-obmenu-generator -s -i -r -d -c
+obmenu-generator -p -i -u -r -d -c
 
 echo "$(tput setaf 1)						Installing gaming$(tput sgr 0)"
 sudo xbps-install -y steam nvidia-libs-32bit libdrm-32bit
