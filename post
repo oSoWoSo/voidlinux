@@ -66,6 +66,9 @@ echo "$(tput setaf 1)						Configuring system$(tput sgr 0)"
 sleep 1s
 sudo usermod --shell /bin/fish zen
 sudo gpasswd -a "$USER" libvirt
+sudo echo en_US.UTF-8 UTF-8 >> /etc/default/libc-locales
+sudo echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
+sudo xbps-reconfigure -f glibc-locales
 touch ~/.config/openbox/menu.xml
 obmenu-generator -p -i -u -r -d -c
 
