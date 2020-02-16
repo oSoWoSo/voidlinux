@@ -14,14 +14,20 @@ git clone git://github.com/zen0bit/bin.git
 
 cd bin
 
-sudo chmod +x post
+sudo chmod +x post-pass
 
 cd
 
-./bin/post
+./bin/post-pass
 
  *
  *
+
+Add: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
+To grub
+
+*
+*
 
 Thanks autors for great codes
 
