@@ -1,29 +1,24 @@
 VOID base post install script created by me
 
-Run
+Run...
 
 sudo xbps-install -S
-
-*
-
 sudo xbps-install git
-
-*
 
 git clone git://github.com/zen0bit/bin.git
 
 cd bin
-
 sudo chmod +x post-pass
-
 cd
 
+sudo su
+bash
 ./bin/post-pass
 
- *
- *
+*
+*
 
-Add: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
+Add: amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
 To grub
 
 *
