@@ -48,7 +48,7 @@ vpm readme
 
 *
 
-https://github.com/zen0bit/void_post/blob/master/vpm.md
+https://github.com/netzverweigerer/vpm/blob/master/README.md
 
 *
 
@@ -56,7 +56,7 @@ vpsm readme
 
 *
 
-https://github.com/zen0bit/void_post/blob/master/vpsm.md
+https://github.com/sinetoami/vpsm/blob/master/README.md
 
 *
 
@@ -64,7 +64,7 @@ vsv readme
 
 *
 
-https://github.com/zen0bit/void_post/blob/master/vsv.md
+https://github.com/bahamas10/vsv/blob/master/README.md
 
 *
 
@@ -72,4 +72,4 @@ piu readme
 
 *
 
-https://github.com/zen0bit/void_post/blob/master/piu.md
+https://github.com/keithieopia/piu/blob/master/README.md
