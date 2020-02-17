@@ -12,20 +12,44 @@ echo "$(tput setaf 1)						Updating system$(tput sgr 0)"
 sleep 1s
 xbps-install -Syu
 
+echo "$(tput setaf 1)						Installing VGA passthrough$(tput sgr 0)"
+sleep 1s
+
+echo "Edit grub: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
+sleep 5s
+nano /etc/default/grub
+
+echo "Updating grub"
+sleep 1s
+grub-mkconfig -o /boot/grub/grub.cfg
+
+echo "Getting GPU passthrough scripts ready"
+sleep 1s
+cp /home/zen/bin/vfio-pci-override-vga.sh /usr/bin/vfio-pci-override-vga.sh
+chmod 755 /usr/bin/vfio-pci-override-vga.sh
+
+echo "install vfio-pci /usr/bin/vfio-pci-override-vga.sh" > /etc/modprobe.d/local.conf
+sleep 1s
+cp /home/zen/bin/local.conf /etc/dracut.conf.d/local.conf
+
+echo "Generating initramfs"
+sleep 1s
+dracut -f --kver $(uname -r)
+
 echo "$(tput setaf 1)						Installing drivers$(tput sgr 0)"
 sleep 1s
+
 xbps-install -y nvidia
 xbps-install -y xorg-minimal xorg-fonts
+nvidia-xconfig
 xbps-install -y lightdm lightdm-gtk3-greeter
 xbps-install -y ntfs-3g mtools
 xbps-install -y alsa-utils sox volumeicon
-xbps-remove -y xterm
-nvidia-xconfig
 
 echo "$(tput setaf 1)						Installing packages$(tput sgr 0)"
 sleep 1s
-xbps-install -y vsv git wget
-chmod +x /home/zen/bin/mirrors /home/zen/bin/passthrough /home/zen/bin/piu /home/zen/bin/vpm /home/zen/bin/vpsm /home/zen/bin/vsv
+xbps-install -y vsv wget
+sudo -u zen chmod +x /home/zen/bin/mirrors /home/zen/bin/passthrough /home/zen/bin/piu /home/zen/bin/vpm /home/zen/bin/vpsm /home/zen/bin/vsv
 cp -v /home/zen/bin/vpm /bin
 xbps-install -y vpsm
 #git clone git://github.com/void-linux/void-packages.git
@@ -68,12 +92,11 @@ echo "$(tput setaf 1)						Configuring system$(tput sgr 0)"
 sleep 1s
 usermod --shell /bin/fish zen
 gpasswd -a zen libvirt
-echo en_US.UTF-8 UTF-8 >> /etc/default/libc-locales
 echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
 xbps-reconfigure -f glibc-locales
-cp -r /home/zen/bin/.config /home/zen/
-cp /home/zen/bin/.asoundrc /home/zen/
-obmenu-generator -p -i -u -r -d -c
+sudo -u zen cp -r /home/zen/bin/.config /home/zen/
+sudo -u zen cp /home/zen/bin/.asoundrc /home/zen/
+sudo -u zen obmenu-generator -p -i -u -r -d -c
 
 echo "$(tput setaf 1)						Installing gaming$(tput sgr 0)"
 xbps-install -y steam nvidia-libs-32bit libdrm-32bit
@@ -81,30 +104,6 @@ xbps-install -y steam nvidia-libs-32bit libdrm-32bit
 echo "$(tput setaf 1)						Removing orphaned packages$(tput sgr 0)"
 sleep 1s
 xbps-remove -Oo
-
-echo "$(tput setaf 1)						Installing VGA passthrough$(tput sgr 0)"
-sleep 1s
-
-echo "Edit grub: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
-sleep 5s
-sudo nano /etc/default/grub
-
-echo "Updating grub"
-sleep 1s
-sudo grub-mkconfig -o /boot/grub/grub.cfg
-
-echo "Getting GPU passthrough scripts ready"
-sleep 1s
-sudo cp /home/zen/bin/vfio-pci-override-vga.sh /usr/bin/vfio-pci-override-vga.sh
-sudo chmod 755 /usr/bin/vfio-pci-override-vga.sh
-
-echo "install vfio-pci /usr/bin/vfio-pci-override-vga.sh" > /etc/modprobe.d/local.conf
-sleep 1s
-sudo cp /home/zen/bin/local.conf /etc/dracut.conf.d/local.conf
-
-echo "Generating initramfs"
-sleep 1s
-sudo dracut -f --kver $(uname -r)
 
 echo "$(tput setaf 1)						Restart your computer and enjoy Void linux....$(tput sgr 0)"
 sleep 1s
