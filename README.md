@@ -39,6 +39,9 @@ https://github.com/netzverweigerer
 https://github.com/duckwork
 
 *
+https://github.com/sinetoami
+
+*
 
 vpm readme
 
