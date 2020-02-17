@@ -10,7 +10,7 @@ git clone git://github.com/zen0bit/bin.git
 
 cd bin
 
-sudo chmod +x post-pass
+sudo chmod +x post
 
 cd
 
