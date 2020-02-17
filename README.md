@@ -23,8 +23,8 @@ bash
 *
 *
 
-Add: amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
-To grub
+Add: "amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
+to grub
 
 *
 *
