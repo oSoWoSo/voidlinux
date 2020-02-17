@@ -44,7 +44,7 @@ xbps-install -y vpsm
 
 echo "$(tput setaf 1)						Installing openbox$(tput sgr 0)"
 xbps-install -y pcmanfm-qt lxqt-sudo lxqt-admin lxqt-config qterminal
-xbps-install -y openbox obconf-qt oblogout obmenu obmenu-generator tint2 psuinfo nitrogen
+xbps-install -y openbox obconf-qt oblogout obmenu obmenu-generator tint2 psuinfo nitrogen lxappearance
 xbps-install -y breeze-gtk breeze-cursors breeze-icons adwaita-qt adwaita-icon-theme adwaita-plus
 #git clone git://gitlab.com/dwt1/dt-dark-theme.git
 
