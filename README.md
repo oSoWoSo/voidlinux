@@ -35,6 +35,7 @@ rc.xml to ~/.config/openbox/rc.xml
 to  <!-- Keybindings for desktop switching --> section
 
 
+
 *
 *
 *
