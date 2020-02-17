@@ -29,47 +29,25 @@ Thanks autors for great codes
 *
 
 https://github.com/keithieopia
-
 *
-
 https://github.com/bahamas10
-
 *
-
 https://github.com/netzverweigerer
-
 *
-
 https://github.com/duckwork
-
 *
-
 vpm readme
-
 *
-
 https://github.com/netzverweigerer/vpm/blob/master/README.md
-
 *
-
 vpsm readme
-
 *
-
 https://github.com/sinetoami/vpsm/blob/master/README.md
-
 *
-
 vsv readme
-
 *
-
 https://github.com/bahamas10/vsv/blob/master/README.md
-
 *
-
 piu readme
-
 *
-
 https://github.com/keithieopia/piu/blob/master/README.md
