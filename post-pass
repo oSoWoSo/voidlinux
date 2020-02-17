@@ -43,7 +43,7 @@ xbps-install -y nvidia
 xbps-install -y xorg-minimal xorg-fonts
 nvidia-xconfig
 xbps-install -y lightdm lightdm-gtk3-greeter
-xbps-install -y ntfs-3g mtools
+xbps-install -y ntfs-3g mtools xtools
 xbps-install -y alsa-utils sox volumeicon
 
 echo "$(tput setaf 1)						Installing packages$(tput sgr 0)"
