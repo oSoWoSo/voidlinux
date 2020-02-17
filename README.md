@@ -32,7 +32,7 @@ Add content of
 
 rc.xml to ~/.config/openbox/rc.xml
 
-to  <!-- Keybindings for desktop switching --> section
+to  "<!-- Keybindings for desktop switching -->" section
 
 
 
