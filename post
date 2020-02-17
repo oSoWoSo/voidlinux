@@ -60,6 +60,8 @@ xbps-install -y htop fish-shell gparted xarchiver neofetch conky
 #git clone https://github.com/zcot/conky-manager2.git
 xbps-install -y vlc
 
+xbps-install -y dmenu 
+
 echo "$(tput setaf 1)						Installing virtualisation$(tput sgr 0)"
 xbps-install -y virt-manager libvirt qemu
 
