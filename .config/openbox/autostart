@@ -1,4 +1,6 @@
 tint2 &
+setxkbmap cz &
+nitrogen --restore &
 volumeicon &
 conky &
 
