@@ -1,92 +1,25 @@
 #!/bin/bash
 # Void Linux post-install script
 
-echo "$(tput setaf 1)						Starting Void Linux post-install script$(tput sgr 0)"
-
 xbps-install -S
-xbps-install -y libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree void-repo-debug nano
-
-echo "$(tput setaf 1)						Updating system$(tput sgr 0)"
+xbps-install -y libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree nano
 xbps-install -Syu
-
-echo "$(tput setaf 1)						Installing VGA passthrough$(tput sgr 0)"
-echo "Edit grub: intel_iommu=on or amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
-sleep 5s
-nano /etc/default/grub
-
-echo "Updating grub"
-grub-mkconfig -o /boot/grub/grub.cfg
-
-echo "Getting GPU passthrough scripts ready"
-cp /home/zen/bin/vfio-pci-override-vga.sh /usr/bin/vfio-pci-override-vga.sh
-chmod 755 /usr/bin/vfio-pci-override-vga.sh
-
-echo "install vfio-pci /usr/bin/vfio-pci-override-vga.sh" > /etc/modprobe.d/local.conf
-cp /home/zen/bin/local.conf /etc/dracut.conf.d/local.conf
-
-echo "Generating initramfs"
-dracut -f --kver $(uname -r)
-
-echo "$(tput setaf 1)						Installing drivers$(tput sgr 0)"
-xbps-install -y nvidia
-xbps-install -y xorg-minimal xorg-fonts
-nvidia-xconfig
-xbps-install -y lightdm lightdm-gtk3-greeter numlockx
+xbps-install -y xorg-minimal xorg-fonts setxkb
+#xbps-install -y lightdm lightdm-gtk3-greeter numlockx
 xbps-install -y ntfs-3g mtools xtools
 xbps-install -y alsa-utils sox volumeicon
-
-echo "$(tput setaf 1)						Installing packages$(tput sgr 0)"
-xbps-install -y vsv wget
-sudo -u zen chmod +x /home/zen/bin/mirrors /home/zen/bin/passthrough /home/zen/bin/piu /home/zen/bin/vpm /home/zen/bin/vpsm /home/zen/bin/vsv
-cp -v /home/zen/bin/vpm /bin
-xbps-install -y vpsm
-#git clone git://github.com/void-linux/void-packages.git
-
-echo "$(tput setaf 1)						Installing openbox$(tput sgr 0)"
-xbps-install -y pcmanfm-qt lxqt-sudo lxqt-admin lxqt-config qterminal
-xbps-install -y openbox obconf-qt oblogout obmenu obmenu-generator tint2 psuinfo nitrogen lxappearance xscreensaver
-xbps-install -y breeze-gtk breeze-cursors breeze-icons adwaita-qt adwaita-icon-theme adwaita-plus
-#git clone git://gitlab.com/dwt1/dt-dark-theme.git
-
-echo "$(tput setaf 1)						Installing editors$(tput sgr 0)"
+xbps-install -y vsv vpm vpsm
+xbps-install -y pcmanfm qterminal
+xbps-install -y openbox obconf oblogout obmenu obmenu-generator tint2 nitrogen lxappearance xscreensaver
 xbps-install -y geany
-
-echo "$(tput setaf 1)						Installing network$(tput sgr 0)"
-xbps-install -y firefox qbittorrent
-
-echo "$(tput setaf 1)						Installing essentials$(tput sgr 0)"
+xbps-install -y firefox
 xbps-install -y htop fish-shell gparted xarchiver neofetch conky
-#libgee08 rsync ImageMagick
-#git clone https://github.com/zcot/conky-manager2.git
-xbps-install -y vlc
-
 xbps-install -y dmenu 
-
-echo "$(tput setaf 1)						Installing virtualisation$(tput sgr 0)"
-xbps-install -y virt-manager libvirt qemu
-
-echo "$(tput setaf 1)						Installing services$(tput sgr 0)"
-ln -s /etc/sv/libvirtd /var/service
-ln -s /etc/sv/virtlockd /var/service
-ln -s /etc/sv/virtlogd /var/service
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/acpid /var/service
-
-echo "$(tput setaf 1)						Configuring system$(tput sgr 0)"
-usermod --shell /bin/fish zen
-gpasswd -a zen libvirt
 echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
 xbps-reconfigure -f glibc-locales
 sudo -u zen cp -r /home/zen/bin/.config /home/zen/
 sudo -u zen cp /home/zen/bin/.asoundrc /home/zen/
 sudo -u zen obmenu-generator -p -i -u -r -d -c
-
-echo "$(tput setaf 1)						Installing gaming$(tput sgr 0)"
-xbps-install -y steam nvidia-libs-32bit libdrm-32bit
-
-echo "$(tput setaf 1)						Removing orphaned packages$(tput sgr 0)"
 xbps-remove -Oo
-
-echo "$(tput setaf 1)						Restart your computer and enjoy Void linux....$(tput sgr 0)"
-ln -s /etc/sv/lightdm /var/service
-reboot
