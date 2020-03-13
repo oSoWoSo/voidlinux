@@ -1,5 +1,7 @@
 VOID base post install script created by me
 
+git clone https://github.com/zen0bit/voidlinux ~/bin
+
 Run...
 
 sudo xbps-install -S
