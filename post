@@ -8,18 +8,18 @@ xbps-install -y xorg-minimal xorg-fonts setxkbmap
 #xbps-install -y lightdm lightdm-gtk3-greeter numlockx
 xbps-install -y ntfs-3g mtools xtools
 xbps-install -y alsa-utils sox volumeicon
-xbps-install -y vsv vpm vpsm
-xbps-install -y pcmanfm qterminal
-xbps-install -y openbox obconf oblogout obmenu obmenu-generator tint2 nitrogen lxappearance xscreensaver
+xbps-install -y pcmanfm xterm
+xbps-install -y openbox obconf oblogout obmenu-generator tint2 nitrogen xscreensaver
 xbps-install -y geany
 xbps-install -y firefox
 xbps-install -y htop fish-shell gparted xarchiver neofetch conky
 xbps-install -y dmenu 
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/acpid /var/service
-echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
-xbps-reconfigure -f glibc-locales
+#echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
+#xbps-reconfigure -f glibc-locales
 sudo -u zen cp -r /home/zen/bin/.config /home/zen/
 sudo -u zen cp /home/zen/bin/.asoundrc /home/zen/
+sudo -u zen cp /home/zen/bin/.xinitrc /home/zen/
 sudo -u zen obmenu-generator -p -i -u -r -d -c
 xbps-remove -Oo
