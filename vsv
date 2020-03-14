@@ -108,6 +108,16 @@ setcolors() {
 	esac
 }
 
+# check if we have UID 0, exit otherwise
+rootcheck () {
+  if [[ $EUID -gt 0 ]]; then
+    msg "$progname: This operation needs super-user privileges."
+    SUDO=sudo
+  else
+    SUDO=''
+  fi
+}
+
 usage() {
 	local cr=$colorreset
 	local logo
