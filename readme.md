@@ -1,26 +1,16 @@
 VOID base post install script created by me
 
-git clone https://github.com/zen0bit/voidlinux ~/bin
-
-Run...
-
 sudo xbps-install -S
 
 sudo xbps-install git
 
-git clone git://github.com/zen0bit/bin.git
+git clone https://github.com/zen0bit/voidlinux ~/bin
 
 cd bin
 
 sudo chmod +x post
 
-cd
-
-sudo su
-
-bash
-
-./bin/post-pass
+sudo ./bin/post-1-assudo
 
 *
 *
@@ -35,8 +25,6 @@ Add content of
 rc.xml to ~/.config/openbox/rc.xml
 
 to  -- Keybindings for desktop switching -- section
-
-
 
 *
 *
