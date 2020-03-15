@@ -15,7 +15,7 @@ ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/acpid /var/service
 #echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
 #xbps-reconfigure -f glibc-locales
-sudo -u "$USER" cp ~/bin/etc/doas.conf /etc/
+cp ~/bin/etc/doas.conf /etc/
 sudo -u "$USER" cp -r ~/bin/.config ~/
 sudo -u "$USER" cp ~/bin/.asoundrc ~/
 sudo -u "$USER" cp ~/bin/.xinitrc ~/
