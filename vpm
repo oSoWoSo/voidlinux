@@ -158,7 +158,7 @@ version () {
 rootcheck () {
   if [[ $EUID -gt 0 ]]; then
     msg "$progname: This operation needs super-user privileges."
-    SUDO=sudo
+    SUDO=doas
   else
     SUDO=''
   fi
