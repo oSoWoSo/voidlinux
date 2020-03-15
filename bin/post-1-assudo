@@ -1,20 +1,17 @@
 #!/bin/bash
 # Void Linux post-install script
 xbps-install -S
-xbps-install -y libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree nano
+xbps-install -y libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree
 xbps-install -Syu
 xbps-install -y xorg-minimal xorg-fonts setxkbmap
 xbps-install -y ntfs-3g mtools xtools
 xbps-install -y alsa-utils sox volumeicon
-xbps-install -y spacefm nano geany sakura dmenu opendoas fish-shell neofetch conky
+xbps-install -y nano geany sakura opendoas fish-shell neofetch conky
 xbps-install -y openbox obconf oblogout obmenu-generator tint2 jgmenu nitrogen xscreensaver
-xbps-install -y firefox
-ln -s /etc/sv/dbus /var/service
-ln -s /etc/sv/acpid /var/service
-#echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
-#xbps-reconfigure -f glibc-locales
+xbps-install -y firefox deadbeef mpv
+#ln -s /etc/sv/dbus /var/service
+#ln -s /etc/sv/acpid /var/service
+cat /etc/doas.conf
 echo permit persist keepenv :wheel >> /etc/doas.conf
-#echo permit persist keepenv :"$USER" >> /etc/doas.conf
 usermod --shell /bin/fish zen
-xbps-remove -F sudo
-xbps-remove -Oo
+sudo -u zen obmenu-generator -p -i -u -d -c
