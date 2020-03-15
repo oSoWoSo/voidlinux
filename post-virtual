@@ -1,6 +1,5 @@
 #!/bin/bash
 # Void Linux post-install script
-
 xbps-install -S
 xbps-install -y libxbps xbps void-repo-nonfree void-repo-multilib void-repo-multilib-nonfree nano
 xbps-install -Syu
@@ -9,16 +8,17 @@ xbps-install -y xorg-minimal xorg-fonts setxkbmap
 xbps-install -y ntfs-3g mtools xtools
 xbps-install -y alsa-utils sox volumeicon
 xbps-install -y pcmanfm nano geany sakura
-xbps-install -y openbox obconf oblogout obmenu-generator tint2 nitrogen xscreensaver
-#xbps-install -y firefox
-#xbps-install -y htop fish-shell gparted xarchiver neofetch conky
+xbps-install -y openbox obconf oblogout obmenu-generator tint2 nitrogen xscreensaver fish-shell opendoas neofetch
+xbps-install -y firefox
 xbps-install -y dmenu 
 ln -s /etc/sv/dbus /var/service
 ln -s /etc/sv/acpid /var/service
 #echo cs_CZ.UTF-8 UTF-8 >> /etc/default/libc-locales
 #xbps-reconfigure -f glibc-locales
-sudo -u zen cp -r /home/zen/bin/.config /home/zen/
-sudo -u zen cp /home/zen/bin/.asoundrc /home/zen/
-sudo -u zen cp /home/zen/bin/.xinitrc /home/zen/
-sudo -u zen obmenu-generator -p -i -u -d -c
+sudo -u "$USER" cp ~/bin/etc/doas.conf /etc/
+sudo -u "$USER" cp -r ~/bin/.config ~/
+sudo -u "$USER" cp ~/bin/.asoundrc ~/
+sudo -u "$USER" cp ~/bin/.xinitrc ~/
+sudo -u "$USER" obmenu-generator -p -i -u -d -c
+xbps-remove -F sudo
 xbps-remove -Oo
