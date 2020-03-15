@@ -14,12 +14,9 @@ sudo ./bin/post-1-assudo
 
 *
 *
-
-Add: "amd_iommu=on rd.driver.pre=vfio-pci kvm.ignore_msrs=1"
-to grub
-
 *
 *
+
 Add content of 
 
 rc.xml to ~/.config/openbox/rc.xml
