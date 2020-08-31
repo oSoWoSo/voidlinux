@@ -1,0 +1,53 @@
+#!/bin/bash
+# Require geoip
+#sudo xbps-install -S geoip
+declare -a arr=("alpha.de.repo.voidlinux.org"
+"mirrors.servercentral.com/voidlinux/"
+"alpha.us.repo.voidlinux.org"
+"mirror.clarkson.edu/voidlinux/"
+"mirror.ps.kz/voidlinux/"
+"mirrors.bfsu.edu.cn/voidlinux/"
+"mirrors.cnnic.cn/voidlinux/"
+"mirrors.tuna.tsinghua.edu.cn/voidlinux/"
+"mirror.maakpain.kro.kr/void/"
+"void.webconverger.org"
+"mirror.aarnet.edu.au/voidlinux/"
+"ftp.swin.edu.au/voidlinux/"
+"void.cijber.net"
+"dk.archive.ubuntu.com/voidlinux/"
+"ftp.dk.xemacs.org/voidlinux/"
+"mirrors.dotsrc.org/voidlinux/"
+"quantum-mirror.hu/mirrors/pub/voidlinux/"
+"mirror.i-novus.ru/mirrors/voidlinux/"
+"ftp.debian.ru/mirrors/voidlinux/"
+"mirror.yandex.ru/mirrors/voidlinux/"
+"cdimage.debian.org/mirror/voidlinux/"
+"ftp.acc.umu.se/mirror/voidlinux/"
+"ftp.gnome.org/mirror/voidlinux/"
+"ftp.lysator.liu.se/pub/voidlinux/"
+"ftp.sunet.se/mirror/voidlinux/")
+
+fping=10000
+frepo=""
+for repo in "${arr[@]}"
+do
+geo=`geoiplookup $repo | head -1 | sed 's/^.*: //'`
+echo "Testing ping for $repo ($geo)"
+ping=`ping -c 4 $repo | tail -1| awk '{print $4}' | cut -d '/' -f 2 | bc -l`
+echo "$repo Average ping: $ping"
+if (( $(bc <<< "$ping<$fping") ))
+   then
+      frepo=$repo
+      fping=$ping
+fi
+done
+geo=`geoiplookup $frepo | head -1 | sed 's/^.*: //'`
+echo "Recommended repo is: $frepo ($geo)"
+echo "Ping: $fping"
+read -p "Change mirror to "$frepo" now?   [Y/n]" -n 1 change
+change="${change:-y}"
+if [[ $change = "y" ]]; then
+#sudo mkdir -p /etc/xbps.d
+sudo cp -r /usr/share/xbps.d/*-repository-*.conf /etc/xbps.d/
+sudo sed -i 's|alpha.de.repo.voidlinux.org|'$frepo'|g' /etc/xbps.d/*-repository-*.conf
+fi
